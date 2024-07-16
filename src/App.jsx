@@ -4,7 +4,7 @@ const App = () => {
   return (
     <React.Fragment>
       <div>
-        <h1>Hello World</h1>
+        <h1>Hello World, This is my 2048 game using MERN Stack technologies </h1>
       </div>
     </React.Fragment>
   );
