@@ -165,30 +165,30 @@ const Game = () => {
     };
   }, [grid, gameOver, gameWon]);
 
-  // const getTileColor = (value) => {
-  //   switch (value) {
-  //     case 2:
-  //       return 'bg-gray-700';
-  //     case 4:
-  //       return 'bg-cyan-600';
-  //     case 8:
-  //       return 'bg-orange-700';
-  //     case 16:
-  //       return 'bg-yellow-700';
-  //     case 32:
-  //       return 'bg-red-400';
-  //     case 64:
-  //       return 'bg-purple-600';
-  //     case 128:
-  //       return 'bg-cyan-400';
-  //     case 256:
-  //       return 'bg-green-700';
-  //     case 512:
-  //       return 'bg-blue-700';      
-  //     default:
-  //       return 'bg-gray-300';
-  //   }
-  // };
+  const getTileColor = (value) => {
+    switch (value) {
+      // case 2:
+      //   return 'bg-gray-700';
+      // case 4:
+      //   return 'bg-cyan-600';
+      // case 8:
+      //   return 'bg-orange-700';
+      // case 16:
+      //   return 'bg-yellow-700';
+      // case 32:
+      //   return 'bg-red-400';
+      // case 64:
+      //   return 'bg-purple-600';
+      // case 128:
+      //   return 'bg-cyan-400';
+      // case 256:
+      //   return 'bg-green-700';
+      case 512:
+        return 'bg-blue-700';      
+      default:
+        return 'bg-gray-300';
+    }
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-purple-700">
