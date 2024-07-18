@@ -27,6 +27,7 @@ const Game = () => {
 
   const [grid, setGrid] = useState(initializeGrid);
   const [gameOver, setGameOver] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
 
   const slide = (grid, direction) => {
     let moved = false;
@@ -107,6 +108,9 @@ const Game = () => {
       if (!canMove(newGrid)) {
         setGameOver(true);
       }
+      if (hasReached512(newGrid)) {
+        setGameWon(true);
+      }
     }
 
     return newGrid;
@@ -123,9 +127,18 @@ const Game = () => {
     return false;
   };
 
+  const hasReached512 = (grid) => {
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (grid[i][j] === 512) return true;
+      }
+    }
+    return false;
+  };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (gameOver) return;
+      if (gameOver || gameWon) return;
       let newGrid;
       switch (event.key) {
         case 'ArrowUp':
@@ -150,7 +163,7 @@ const Game = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [grid, gameOver]);
+  }, [grid, gameOver, gameWon]);
 
   const getTileColor = (value) => {
     switch (value) {
@@ -171,7 +184,7 @@ const Game = () => {
       case 256:
         return 'bg-green-700';
       case 512:
-        return 'bg-gray-600';      
+        return 'bg-blue-700';      
       default:
         return 'bg-gray-300';
     }
@@ -196,6 +209,11 @@ const Game = () => {
       {gameOver && (
         <div className="mt-4 p-4 bg-red-600 text-white text-lg rounded">
           Game Over
+        </div>
+      )}
+      {gameWon && (
+        <div className="mt-4 p-4 bg-green-600 text-white text-lg rounded">
+          You Won!
         </div>
       )}
     </div>
