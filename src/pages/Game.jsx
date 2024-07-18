@@ -173,8 +173,8 @@ const Game = () => {
         return 'bg-cyan-600';
       case 8:
         return 'bg-orange-700';
-      // case 16:
-      //   return 'bg-yellow-700';
+      case 16:
+        return 'bg-yellow-700';
       // case 32:
       //   return 'bg-red-400';
       // case 64:
