@@ -169,8 +169,8 @@ const Game = () => {
     switch (value) {
       case 2:
         return 'bg-gray-700';
-      // case 4:
-      //   return 'bg-cyan-600';
+      case 4:
+        return 'bg-cyan-600';
       // case 8:
       //   return 'bg-orange-700';
       // case 16:
