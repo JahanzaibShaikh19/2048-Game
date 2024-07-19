@@ -1,150 +1,23 @@
+// src/pages/Game.jsx
+
 import React, { useState, useEffect } from 'react';
+import Grid from '../components/Grid';
+import Timer from '../components/Timer';
+import useTimer from '../components/useTimer';
+import { initializeGrid, slide, canMove, hasReached512 } from '../components/gameLogic';
 
 const Game = () => {
-  const initializeGrid = () => {
-    const grid = Array.from({ length: 4 }, () => Array(4).fill(null));
-    addRandomTile(grid);
-    addRandomTile(grid);
-    return grid;
-  };
-
-  const addRandomTile = (grid) => {
-    const emptyCells = [];
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        if (grid[i][j] === null) {
-          emptyCells.push({ row: i, col: j });
-        }
-      }
-    }
-
-    if (emptyCells.length > 0) {
-      const { row, col } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      const newValue = Math.random() < 0.9 ? 2 : 4; // 90% chance to add a 2, 10% chance to add a 4
-      grid[row][col] = newValue;
-    }
-  };
-
   const [grid, setGrid] = useState(initializeGrid);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
-  const [time, setTime] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [timerStarted, setTimerStarted] = useState(false);
-
-  const slide = (grid, direction) => {
-    let moved = false;
-    let newGrid = grid.map(row => [...row]);
-
-    const slideRow = (row) => {
-      let newRow = row.filter(val => val !== null);
-      for (let i = 0; i < newRow.length - 1; i++) {
-        if (newRow[i] === newRow[i + 1]) {
-          newRow[i] *= 2;
-          newRow[i + 1] = null;
-          moved = true;
-        }
-      }
-      newRow = newRow.filter(val => val !== null);
-      while (newRow.length < 4) newRow.push(null);
-      return newRow;
-    };
-
-    const slideLeft = (grid) => {
-      return grid.map(row => slideRow(row));
-    };
-
-    const slideRight = (grid) => {
-      return grid.map(row => slideRow(row.reverse()).reverse());
-    };
-
-    const slideUp = (grid) => {
-      let newGrid = [[], [], [], []];
-      for (let j = 0; j < 4; j++) {
-        let col = [];
-        for (let i = 0; i < 4; i++) {
-          if (grid[i][j] !== null) col.push(grid[i][j]);
-        }
-        col = slideRow(col);
-        for (let i = 0; i < 4; i++) {
-          newGrid[i][j] = col[i];
-        }
-      }
-      return newGrid;
-    };
-
-    const slideDown = (grid) => {
-      let newGrid = [[], [], [], []];
-      for (let j = 0; j < 4; j++) {
-        let col = [];
-        for (let i = 0; i < 4; i++) {
-          if (grid[i][j] !== null) col.push(grid[i][j]);
-        }
-        col = slideRow(col.reverse()).reverse();
-        for (let i = 0; i < 4; i++) {
-          newGrid[i][j] = col[i];
-        }
-      }
-      return newGrid;
-    };
-
-    switch (direction) {
-      case 'left':
-        newGrid = slideLeft(grid);
-        break;
-      case 'right':
-        newGrid = slideRight(grid);
-        break;
-      case 'up':
-        newGrid = slideUp(grid);
-        break;
-      case 'down':
-        newGrid = slideDown(grid);
-        break;
-      default:
-        break;
-    }
-
-    if (JSON.stringify(newGrid) !== JSON.stringify(grid)) {
-      moved = true;
-      addRandomTile(newGrid);
-      if (!canMove(newGrid)) {
-        setGameOver(true);
-        setIsTimerActive(false); // Stop the timer
-      }
-      if (hasReached512(newGrid)) {
-        setGameWon(true);
-        setIsTimerActive(false); // Stop the timer
-      }
-    }
-
-    return newGrid;
-  };
-
-  const canMove = (grid) => {
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        if (grid[i][j] === null) return true;
-        if (i < 3 && grid[i][j] === grid[i + 1][j]) return true;
-        if (j < 3 && grid[i][j] === grid[i][j + 1]) return true;
-      }
-    }
-    return false;
-  };
-
-  const hasReached512 = (grid) => {
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        if (grid[i][j] === 512) return true;
-      }
-    }
-    return false;
-  };
+  const time = useTimer(isTimerActive);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (gameOver || gameWon) return;
-      
+
       if (!timerStarted) {
         setTimerStarted(true);
         setIsTimerActive(true);
@@ -167,7 +40,17 @@ const Game = () => {
         default:
           return;
       }
-      setGrid(newGrid);
+
+      if (newGrid.moved) {
+        setGrid(newGrid.newGrid);
+        if (hasReached512(newGrid.newGrid)) {
+          setGameWon(true);
+          setIsTimerActive(false);
+        } else if (!canMove(newGrid.newGrid)) {
+          setGameOver(true);
+          setIsTimerActive(false);
+        }
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -176,63 +59,10 @@ const Game = () => {
     };
   }, [grid, gameOver, gameWon, timerStarted]);
 
-  useEffect(() => {
-    let timer;
-    if (isTimerActive) {
-      timer = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
-    }
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isTimerActive]);
-
-  const getTileColor = (value) => {
-    switch (value) {
-      case 2:
-        return 'bg-gray-700';
-      case 4:
-        return 'bg-cyan-600';
-      case 8:
-        return 'bg-orange-700';
-      case 16:
-        return 'bg-yellow-700';
-      case 32:
-        return 'bg-red-400';
-      case 64:
-        return 'bg-purple-600';
-      case 128:
-        return 'bg-cyan-400';
-      case 256:
-        return 'bg-green-700';
-      case 512:
-        return 'bg-blue-700';      
-      default:
-        return 'bg-gray-300';
-    }
-  };
-
   return (
     <div className="flex flex-col items-center min-h-screen bg-purple-700">
-      <div className="grid grid-cols-4 gap-2 p-4 bg-gray-800 rounded-lg">
-        {grid.map((row, rowIndex) =>
-          row.map((value, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className={`w-16 h-16 flex items-center justify-center rounded text-white text-lg font-bold ${
-                getTileColor(value)
-              }`}
-            >
-              {value}
-            </div>
-          ))
-        )}
-      </div>
-      <div className="mt-4 p-4 bg-gray-800 text-white text-lg rounded">
-        Time: {Math.floor(time / 60)}:{time % 60 < 10 ? `0${time % 60}` : time % 60}
-      </div>
+      <Grid grid={grid} />
+      <Timer time={time} />
       {gameOver && (
         <div className="mt-4 p-4 bg-red-600 text-white text-lg rounded">
           Game Over
@@ -248,6 +78,3 @@ const Game = () => {
 };
 
 export default Game;
-
-
-// hello world 
