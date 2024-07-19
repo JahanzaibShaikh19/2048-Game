@@ -1,10 +1,16 @@
-import React from "react";
+import {React } from "react";
 
 
 const App = () => {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-5">
       <header className="mb-10">
+      <div className="start">
+        <a href="/game" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Start Game
+        </a>
+      </div>
+
         <h1 className="text-4xl font-extrabold text-indigo-600 animate-bounce">2048 Game Dashboard</h1>
       </header>
       <main className="grid grid-cols-1 md:grid-cols-2 gap-6">
