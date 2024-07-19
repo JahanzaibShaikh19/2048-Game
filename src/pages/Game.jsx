@@ -1,10 +1,9 @@
-// src/pages/Game.jsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Grid from '../components/Grid';
 import Timer from '../components/Timer';
 import useTimer from '../components/useTimer';
 import { initializeGrid, slide, canMove, hasReached512 } from '../components/gameLogic';
+import Hammer from 'hammerjs';
 
 const Game = () => {
   const [grid, setGrid] = useState(initializeGrid);
@@ -13,6 +12,7 @@ const Game = () => {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [timerStarted, setTimerStarted] = useState(false);
   const time = useTimer(isTimerActive);
+  const gameRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -59,8 +59,57 @@ const Game = () => {
     };
   }, [grid, gameOver, gameWon, timerStarted]);
 
+  useEffect(() => {
+    const element = gameRef.current;
+    const mc = new Hammer(element);
+
+    mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+    mc.on('swipe', (event) => {
+      if (gameOver || gameWon) return;
+
+      if (!timerStarted) {
+        setTimerStarted(true);
+        setIsTimerActive(true);
+      }
+
+      let newGrid;
+      switch (event.direction) {
+        case Hammer.DIRECTION_UP:
+          newGrid = slide(grid, 'up');
+          break;
+        case Hammer.DIRECTION_DOWN:
+          newGrid = slide(grid, 'down');
+          break;
+        case Hammer.DIRECTION_LEFT:
+          newGrid = slide(grid, 'left');
+          break;
+        case Hammer.DIRECTION_RIGHT:
+          newGrid = slide(grid, 'right');
+          break;
+        default:
+          return;
+      }
+
+      if (newGrid.moved) {
+        setGrid(newGrid.newGrid);
+        if (hasReached512(newGrid.newGrid)) {
+          setGameWon(true);
+          setIsTimerActive(false);
+        } else if (!canMove(newGrid.newGrid)) {
+          setGameOver(true);
+          setIsTimerActive(false);
+        }
+      }
+    });
+
+    return () => {
+      mc.off('swipe');
+    };
+  }, [grid, gameOver, gameWon, timerStarted]);
+
   return (
-    <div className="flex flex-col items-center min-h-screen bg-purple-700">
+    <div className="flex flex-col items-center min-h-screen bg-purple-700" ref={gameRef}>
       <Grid grid={grid} />
       <Timer time={time} />
       {gameOver && (
