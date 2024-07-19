@@ -28,6 +28,9 @@ const Game = () => {
   const [grid, setGrid] = useState(initializeGrid);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [time, setTime] = useState(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  const [timerStarted, setTimerStarted] = useState(false);
 
   const slide = (grid, direction) => {
     let moved = false;
@@ -107,9 +110,11 @@ const Game = () => {
       addRandomTile(newGrid);
       if (!canMove(newGrid)) {
         setGameOver(true);
+        setIsTimerActive(false); // Stop the timer
       }
       if (hasReached512(newGrid)) {
         setGameWon(true);
+        setIsTimerActive(false); // Stop the timer
       }
     }
 
@@ -139,6 +144,12 @@ const Game = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (gameOver || gameWon) return;
+      
+      if (!timerStarted) {
+        setTimerStarted(true);
+        setIsTimerActive(true);
+      }
+
       let newGrid;
       switch (event.key) {
         case 'ArrowUp':
@@ -163,7 +174,20 @@ const Game = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [grid, gameOver, gameWon]);
+  }, [grid, gameOver, gameWon, timerStarted]);
+
+  useEffect(() => {
+    let timer;
+    if (isTimerActive) {
+      timer = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isTimerActive]);
 
   const getTileColor = (value) => {
     switch (value) {
@@ -205,6 +229,9 @@ const Game = () => {
             </div>
           ))
         )}
+      </div>
+      <div className="mt-4 p-4 bg-gray-800 text-white text-lg rounded">
+        Time: {Math.floor(time / 60)}:{time % 60 < 10 ? `0${time % 60}` : time % 60}
       </div>
       {gameOver && (
         <div className="mt-4 p-4 bg-red-600 text-white text-lg rounded">
