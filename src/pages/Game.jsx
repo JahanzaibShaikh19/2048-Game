@@ -109,7 +109,7 @@ const Game = () => {
   }, [grid, gameOver, gameWon, timerStarted]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-purple-700" ref={gameRef}>
+    <div className="flex flex-col items-center min-h-screen bg-purple-700 mt-5 " ref={gameRef}>
       <Grid grid={grid} />
       <Timer time={time} />
       {gameOver && (
