@@ -80,19 +80,6 @@ const Login = () => {
         </motion.button>
       </motion.div>
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
     </div>
   );
 };
