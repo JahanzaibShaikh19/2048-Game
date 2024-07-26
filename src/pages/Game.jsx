@@ -109,7 +109,8 @@ const Game = () => {
   }, [grid, gameOver, gameWon, timerStarted]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-purple-700 mt-5 " ref={gameRef}>
+    <div className="flex flex-col items-center min-h-screen mt-5 " ref={gameRef}
+    style={{ backgroundColor: 'rgb(34, 33, 45)' }}>
       <Grid grid={grid} />
       <Timer time={time} />
       {gameOver && (
