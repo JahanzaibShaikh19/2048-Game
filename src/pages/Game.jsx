@@ -4,6 +4,7 @@ import Timer from '../components/Timer';
 import useTimer from '../components/useTimer';
 import { initializeGrid, slide, canMove, hasReached512 } from '../components/gameLogic';
 import Hammer from 'hammerjs';
+import Swal from 'sweetalert2';
 
 const Game = () => {
   const [grid, setGrid] = useState(initializeGrid);
@@ -46,9 +47,21 @@ const Game = () => {
         if (hasReached512(newGrid.newGrid)) {
           setGameWon(true);
           setIsTimerActive(false);
+          Swal.fire({
+            title: 'Congratulations!',
+            text: `You reached 512! Time: ${time}`,
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
         } else if (!canMove(newGrid.newGrid)) {
           setGameOver(true);
           setIsTimerActive(false);
+          Swal.fire({
+            title: 'Game Over',
+            text: `Your final time was: ${time}`,
+            icon: 'error',
+            confirmButtonText: 'Try Again'
+          });
         }
       }
     };
@@ -57,7 +70,7 @@ const Game = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [grid, gameOver, gameWon, timerStarted]);
+  }, [grid, gameOver, gameWon, timerStarted, time]);
 
   useEffect(() => {
     const element = gameRef.current;
@@ -96,9 +109,21 @@ const Game = () => {
         if (hasReached512(newGrid.newGrid)) {
           setGameWon(true);
           setIsTimerActive(false);
+          Swal.fire({
+            title: 'Congratulations!',
+            text: `You reached 512! Time: ${time}`,
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
         } else if (!canMove(newGrid.newGrid)) {
           setGameOver(true);
           setIsTimerActive(false);
+          Swal.fire({
+            title: 'Game Over',
+            text: `Your final time was: ${time}`,
+            icon: 'error',
+            confirmButtonText: 'Try Again'
+          });
         }
       }
     });
@@ -106,22 +131,13 @@ const Game = () => {
     return () => {
       mc.off('swipe');
     };
-  }, [grid, gameOver, gameWon, timerStarted]);
+  }, [grid, gameOver, gameWon, timerStarted, time]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-purple-700 mt-5 " ref={gameRef}>
+    <div className="flex flex-col items-center min-h-screen mt-5" ref={gameRef} style={{ backgroundColor: 'rgb(34, 33, 45)' }}>
       <Grid grid={grid} />
       <Timer time={time} />
-      {gameOver && (
-        <div className="mt-4 p-4 bg-red-600 text-white text-lg rounded">
-          Game Over
-        </div>
-      )}
-      {gameWon && (
-        <div className="mt-4 p-4 bg-green-600 text-white text-lg rounded">
-          You Won!
-        </div>
-      )}
+      {/* Removed game over/won messages since they are now handled by SweetAlert2 */}
     </div>
   );
 };
