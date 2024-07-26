@@ -5,7 +5,7 @@ import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 const App = () => (
   <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center p-5 text-white">
     <header className="mb-10 text-center">
-      <h1 className="text-6xl font-extrabold text-indigo-400 animate-pulse mb-5">2048 Game Dashboard</h1>
+      <h1 className="text-6xl font-extrabold text-indigo-400 animate-pulse mb-5 mt-14">2048 Game Dashboard</h1>
       <Link to="/game" className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105">
         Start Game
       </Link>
