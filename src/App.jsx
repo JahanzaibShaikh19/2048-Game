@@ -56,13 +56,13 @@ const App = () => (
             Feel free to reach out to me on my social media or via email.
           </p>
           <div className="flex space-x-4">
-            <a href="https://github.com/yourprofile" className="text-gray-300 hover:text-white transition">
+            <a href="https://github.com/JahanzaibShaikh19" className="text-gray-300 hover:text-white transition">
               <FaGithub size={30} />
             </a>
-            <a href="https://linkedin.com/in/yourprofile" className="text-gray-300 hover:text-white transition">
+            <a href="https://www.linkedin.com/in/jahanzaib-shaikh-9a6199215/" className="text-gray-300 hover:text-white transition">
               <FaLinkedin size={30} />
             </a>
-            <a href="mailto:your.email@example.com" className="text-gray-300 hover:text-white transition">
+            <a href="mailto:jahanzaibshaikh16@gmail.com" className="text-gray-300 hover:text-white transition">
               <FaEnvelope size={30} />
             </a>
           </div>
