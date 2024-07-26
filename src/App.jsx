@@ -50,7 +50,7 @@ const App = () => (
         <div className="p-6">
           <h2 className="text-3xl font-bold mb-4 text-indigo-300">About the Developer</h2>
           <p className="text-gray-300 mb-3">
-            Hi, I'm [Your Name], a passionate web developer specialized in full-stack development using the MERN stack. This project is part of my portfolio to showcase my skills in creating interactive and dynamic web applications.
+            Hi, I'm Jahanzaib Shaikh, a passionate web developer specialized in full-stack development using the MERN stack. This project is part of my portfolio to showcase my skills in creating interactive and dynamic web applications.
           </p>
           <p className="text-gray-300 mb-5">
             Feel free to reach out to me on my social media or via email.

@@ -8,7 +8,7 @@ const Navbar = () => {
       initial={{ y: -250 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 120 }}
-      className="bg-gray-900 bg-opacity-80 backdrop-blur-lg shadow-lg fixed w-full z-10 top-0 flex items-center justify-between p-5"
+      className="bg-gray-800 bg-opacity-100 backdrop-blur-lg shadow-lg fixed w-full z-10 top-0 flex items-center justify-between p-5"
     >
       <div className="text-2xl font-extrabold text-white">
         <Link to="/">2048 Game</Link>
