@@ -27,15 +27,19 @@ const Game = () => {
       let newGrid;
       switch (event.key) {
         case 'ArrowUp':
+          event.preventDefault();
           newGrid = slide(grid, 'up');
           break;
         case 'ArrowDown':
+          event.preventDefault();
           newGrid = slide(grid, 'down');
           break;
         case 'ArrowLeft':
+          event.preventDefault();
           newGrid = slide(grid, 'left');
           break;
         case 'ArrowRight':
+          event.preventDefault();
           newGrid = slide(grid, 'right');
           break;
         default:
@@ -71,7 +75,6 @@ const Game = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [grid, gameOver, gameWon, timerStarted, time]);
-
   useEffect(() => {
     const element = gameRef.current;
     const mc = new Hammer(element);
