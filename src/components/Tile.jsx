@@ -13,7 +13,7 @@ const getTileColor = (value) => {
     case 128: return 'bg-cyan-400';
     case 256: return 'bg-green-700';
     case 512: return 'bg-blue-700';
-    default: return 'bg-gray-300';
+    default: return 'bg-gray-100';
   }
 };
 
