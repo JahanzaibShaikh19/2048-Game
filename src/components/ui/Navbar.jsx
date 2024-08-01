@@ -11,11 +11,11 @@ const Navbar = () => {
       className="bg-gray-800 bg-opacity-100 backdrop-blur-lg shadow-lg fixed w-full z-10 top-0 flex items-center justify-between p-5"
     >
       <div className="text-2xl font-extrabold text-white">
-        <Link to="/">2048 Game</Link>
+        <Link to="/dashboard">2048 Game</Link>
       </div>
       <div className="space-x-4">
         <Link
-          to="/"
+          to="/dashboard"
           className="text-white font-medium text-lg hover:text-gray-400 transition duration-300"
         >
           Home

@@ -41,7 +41,7 @@ const Footer = () => {
           </p>
         </motion.div>
         <div className="flex justify-center space-x-4 mb-4">
-          <Link to="/" className="text-gray-300 hover:text-gray-100 transition duration-300">
+          <Link to="/dashboard" className="text-gray-300 hover:text-gray-100 transition duration-300">
             Home
           </Link>
           <Link to="/game" className="text-gray-300 hover:text-gray-100 transition duration-300">
